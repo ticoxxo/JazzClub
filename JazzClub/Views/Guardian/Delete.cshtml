@@ -1,0 +1,19 @@
+﻿@model Guardian
+
+@{
+	ViewBag.Title = "Delete tutor";
+	
+}
+
+<h1 class="display-4">Delete Tutor @Model.Name</h1>
+
+
+<form asp-action="Delete" method="post">
+	<input type="hidden" asp-for="GuardianId" />
+
+	<button type="submit"  class="btn btn-dark"> Delete tutor</button>
+	<a asp-action="Index" asp-controller="Guardian" class="btn btn-outline-dark">Cancelar</a>
+</form>
+
+
+	

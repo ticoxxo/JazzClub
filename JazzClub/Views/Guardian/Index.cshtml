@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Guardian>
+
+@{
+	ViewBag.Title = "Guardians";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Guardians</h1>
+</div>
+
+<a asp-action="Add">Add Guardian</a>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Celphone</th>
+			<th>Email</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (Guardian guardian in Model)
+		{
+		 <tr>
+			 <td>@guardian.Name</td>
+			 <td>@guardian.Cellphone</td>
+			 <td>@guardian.Email</td>
+			 <td >
+					<a asp-action="Edit" asp-controller="Guardian" asp-route-id="@guardian.GuardianId" class="btn btn-outline-dark">
+						Editar
+					</a>
+				 <a asp-action="Delete" asp-route-id="@guardian.GuardianId" class="btn btn-outline-dark">
+					 Delete
+				 </a>
+			 </td>
+		 </tr>
+		}
+	</tbody>
+</table>

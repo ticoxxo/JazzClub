@@ -1,0 +1,69 @@
+﻿@using JazzClub.Models.Helpers
+@model IEnumerable<Student>
+
+@{
+	ViewBag.Title = "Students";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Students</h1>
+</div>
+
+<a asp-action="Add">Add Student</a>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Celphone</th>
+			
+			<th>Foto</th>
+			<th class="d-none d-sm-table-cell">Tutor</th>
+			<th>Status</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (Student student in Model)
+		{
+			<tr>
+				<td>@student.FullName</td>
+				<td>@student.Cellphone</td>
+
+				<td>
+					@{
+						var base64 = Convert.ToBase64String(student.Photo);
+						var imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+					}
+					<img src="@imgSrc" style="width:200px; height:200px" class="img-fluid img-thumbnail d-none d-sm-block" />
+					<img src="@imgSrc" class="img-fluid img-thumbnail d-block d-sm-none" />
+				</td>
+				<td class="d-none d-sm-table-cell">
+					@if(student.GuardianId != null)
+					{
+						<ul>
+							<li><p>@student.Guardian.Name</p></li>
+							<li hidden="@(student.Guardian.Cellphone == null ? true : false)">@student.Guardian.Cellphone</li>
+							<li hidden="@(student.Guardian.Email == null ? true : false)">@student.Guardian.Email</li>
+						</ul>
+					} 
+					else
+					{
+						<p>N/A</p>
+					}
+				</td>
+				<td>
+					<p style="color:@StatusHelper.ChooseColor(@student.Status)">@StatusHelper.ShowStatus(student.Status)</p>
+				</td>
+				<td>
+					<a asp-action="Edit" asp-controller="Student" asp-route-id="@student.Id" class="btn btn-outline-dark">
+						Editar
+					</a>
+					<a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-outline-dark">
+						Delete
+					</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

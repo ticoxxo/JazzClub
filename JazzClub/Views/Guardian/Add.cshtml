@@ -1,0 +1,54 @@
+﻿@model Guardian
+
+@{
+	ViewBag.Title = $"{ViewBag.Operation} Tutor";
+}
+
+<h1 class="display-4">@ViewBag.Operation Tutor</h1>
+
+<form asp-action="Add" method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="Name" class="form-label"></label>
+		<input  asp-for="Name" class="form-control" />
+	</div>
+	<div class="row justify-content-start">
+		<div class="col-4">
+			<label asp-for="Cellphone" class="form-label"></label>
+			<input asp-for="Cellphone" class="form-control" />
+		</div>
+		<div class="col-4">
+			<label asp-for="Phone" class="form-label"></label>
+			<input asp-for="Phone" class="form-control" />
+		</div>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Email" class="form-label"></label>
+		<input asp-for="Email" class="form-control" />
+	</div>
+	<div class="row justify-content-start">
+		<div class="col-4">
+			<label asp-for="no_ext" class="form-label"></label>
+			<input asp-for="no_ext" class="form-control" />
+		</div>
+		<div class="col-4">
+			<label asp-for="no_int" class="form-label"></label>
+			<input asp-for="no_int" class="form-control" />
+		</div>
+	</div>
+	<div class="row justify-content-start">
+		<div class="col-4">
+			<label asp-for="notes" class="form-label"></label>
+			<input asp-for="notes" class="form-control" />
+		</div>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Address" class="form-label"></label>
+		<input asp-for="Address" class="form-control" />
+	</div>
+
+	<input type="hidden" asp-for="GuardianId"/>
+	
+	<button type="submit" class="btn btn-dark"> Guardar </button>
+	<a asp-action="Index" asp-controller="Guardian" class="btn btn-outline-dark" >Cancelar</a>
+</form>

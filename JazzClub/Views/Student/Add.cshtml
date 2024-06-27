@@ -1,0 +1,89 @@
+﻿@model Student 
+
+@{
+	ViewBag.Title = $"{ViewBag.Operation} Student";
+	
+}
+
+<h1 class="display-4">@ViewBag.Operation Student</h1>
+
+<form enctype="multipart/form-data" asp-action="Add" method="post">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-sm">
+				<label asp-for="FirstName" class="form-label"></label>
+				<input asp-for="FirstName" class="form-control" />
+			</div>
+			<div class="col-sm">
+				<label asp-for="LastName" class="form-label"></label>
+				<input asp-for="LastName" class="form-control" />
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-sm">
+				<label asp-for="Birthday" class="form-label"></label>
+				<input asp-for="Birthday" class="form-control" />
+			</div>
+			<div class="col-sm">
+				<label asp-for="Cellphone" class="form-label"></label>
+				<input asp-for="Cellphone" class="form-control" />
+			</div>
+		</div>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Address" class="form-label"></label>
+		<input asp-for="Address" class="form-control" />
+	</div>
+	<div class="mb-3">
+		<label asp-for="Email" class="form-label"></label>
+		<input asp-for="Email" class="form-control"/>
+	</div>
+	<div class="mb-3">
+		<label asp-for="GuardianId" class="form-label" >Selecciona Tutor</label>
+		@*<select asp-for="GuardianId" asp-items="ViewBag.Guardians" class="form-control">
+			<option value="0">Selecciona un tutor (opcional)</option>
+
+		</select>
+		@* <input type="hidden" id="IDCategoryHidden" name="IDCategoryHidden" value="" /> *@
+		<select asp-for="GuardianId" asp-items="Model.GuardiansSelectList" class="form-select">
+			<option value="">Selecte Category</option>
+		</select>
+		
+		
+	</div>
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-sm">
+				<label asp-for="No_ext" class="form-label"></label>
+				<input asp-for="No_ext" class="form-control" />
+			</div>
+			<div class="col-sm">
+				<label asp-for="No_int" class="form-label"></label>
+				<input asp-for="No_int" class="form-control" />
+			</div>
+		</div>
+	</div>
+	<div class="mb-3">
+		<label asp-for="HealthNotes" class="form-label"></label>
+		<input asp-for="HealthNotes" class="form-control" />
+	</div>
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-sm">
+				<label asp-for="Start_studying_at" class="form-label"></label>
+				<input asp-for="Start_studying_at" class="form-control" />
+			</div>
+			<div class="col-sm">
+				<label asp-for="Photo" class="form-label"></label>
+				<input asp-for="Photo" name="file" type="file" class="form-control" />
+			</div>
+		</div>
+	</div>
+	<input type="hidden" asp-for="Id" />
+
+	<button type="submit" class="btn btn-dark" >Guardar</button>
+	<a asp-action="Index" asp-controller="Student" class="btn btn-outline-dark">Cancelar</a>
+</form>
