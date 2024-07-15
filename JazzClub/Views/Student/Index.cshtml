@@ -9,14 +9,16 @@
 	<h1 class="display-4">Students</h1>
 </div>
 
-<a asp-action="Add">Add Student</a>
+<a asp-action="Add">Agregar estudiante</a>
+<a >Agregar pago</a>
+<a >Inscribir a clase</a>
 
 <table class="table">
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Celphone</th>
-			
+			<th>Cellphone</th>
+			<th>Pagos</th>
 			<th>Foto</th>
 			<th class="d-none d-sm-table-cell">Tutor</th>
 			<th>Status</th>
@@ -29,14 +31,46 @@
 			<tr>
 				<td>@student.FullName</td>
 				<td>@student.Cellphone</td>
-
 				<td>
 					@{
-						var base64 = Convert.ToBase64String(student.Photo);
-						var imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+						if(student.LastPayment == null)
+						{
+							<p>No hay pagos registrados</p>
+							<a asp-action="AddPayment"
+							   asp-controller="Student"
+							   asp-route-id="@student.Id"
+							   class="btn btn-outline-dark">Agregar pago</a>
+						} 
+						else
+						{
+						
+							<p>Ultimo pago:</p>
+							<ul>
+								<li>Total: @student.LastPayment.Total</li>
+								<li>Fecha de pago: @student.LastPayment.PaymentDate</li>
+								<li>Expide en: @student.LastPayment.PaymentExpirationDate</li>
+							</ul>
+						}
 					}
-					<img src="@imgSrc" style="width:200px; height:200px" class="img-fluid img-thumbnail d-none d-sm-block" />
-					<img src="@imgSrc" class="img-fluid img-thumbnail d-block d-sm-none" />
+				</td>
+				<td>
+					@{
+						 string imgSrc;
+						if (student.Photo == null)
+						{
+						imgSrc = "~/Images/image2.png";
+						} else
+						{
+						var base64 = Convert.ToBase64String(student.Photo);
+						imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+						}
+						 
+						//var base64 = Convert.ToBase64String(student.Photo);
+						//var imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+						
+					}
+					<img src="@imgSrc" style="width:200px; height:200px" class="img-fluid img-thumbnail d-none d-sm-block" asp-append-version="true" />
+					<img src="@imgSrc" class="img-fluid img-thumbnail d-block d-sm-none" asp-append-version="true" />
 				</td>
 				<td class="d-none d-sm-table-cell">
 					@if(student.GuardianId != null)

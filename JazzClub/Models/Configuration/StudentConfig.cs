@@ -4,20 +4,25 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace JazzClub.Models.Configuration
 {
-    public class StudentConfig : IEntityTypeConfiguration<Student>
-    {
-        public void Configure(EntityTypeBuilder<Student> entity)
-        {
-            entity.HasMany(e => e.Courses)
-                .WithMany(d => d.Students)
-                .UsingEntity<CourseStudent>();
+	public class StudentConfig : IEntityTypeConfiguration<Student>
+	{
+		public void Configure(EntityTypeBuilder<Student> entity)
+		{
+			entity.HasMany(e => e.Courses)
+				.WithMany(d => d.Students)
+				.UsingEntity<CourseStudent>();
 
-            entity.Property(a => a.GuardianId)
-                .IsRequired(false);
+			/*entity.HasMany(e => e.Courses)
+				.WithMany(d => d.Students)
+				.UsingEntity<Payment>();
+			*/
 
-            entity.Property(a => a.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
-        }
+			entity.Property(a => a.GuardianId)
+				.IsRequired(false);
 
-    }
+			entity.Property(a => a.CreatedAt)
+				.HasDefaultValueSql("CURRENT_TIMESTAMP");
+		}
+
+	}
 }

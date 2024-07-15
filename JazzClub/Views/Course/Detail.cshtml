@@ -1,0 +1,43 @@
+﻿@model Course
+
+@{
+	ViewBag.Title = "Detail";
+}
+
+<h1 class="display-4">Course detail @Model.Name</h1>
+
+<form asp-action="EnrollStudent" method="post">
+	<div class="container-fluid">
+		<label class="form-label">Inscribir alumnos </label>
+		<select asp-for="SelectedStudentId"  asp-items="@Model.StudentsSelectList">
+			<option value="">Selecciona un alumno</option>
+		</select>
+		<input type="hidden" asp-for="CourseId" />
+		<input type="hidden" asp-for="Cost" />
+		<button type="submit" class="btn btn-dark">Inscribir</button>
+	</div>
+</form>
+
+<div style="padding-top: 20px" class="display-6"> Lista de alumnos inscritos</div>
+@{
+	bool showList = (@Model.Students.Count == 0) ? false : true;
+	<p hidden="@showList"> Clase sin alumnos inscritos</p>
+
+	<table >
+	 <thead>
+	 <tr>
+	 <th>Name</th>
+	 <th>Status</th>
+	 </tr>
+	 </thead>
+	 <tbody>
+			@foreach (Student student in Model.Students)
+			{
+				<tr>
+				 <td>@student.FullName</td>
+				 <td>@student.Status</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

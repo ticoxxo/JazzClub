@@ -1,55 +1,5 @@
-﻿@using JazzClub.Models.Helpers
-@model IEnumerable<Course>
-@{
+﻿@{
     ViewData["Title"] = "Courses";
 }
 
-<div class="text-center">
-    <h1>Horario</h1>
-    @foreach (Day day in ViewBag.Day)
-    {
-        var idColor = ViewBag.Id == 0 ? ViewBag.DayId : ViewBag.Id;
-        string btnCss = (idColor == day.DayId) ? "btn btn-dark" : "btn btn-outline-dark";
-        <a asp-action="Index" asp-route-id="@day.DayId" class="@btnCss me-1 mb-2">@day.Name</a>
-    }
-</div>
-
-<a asp-action="Add" asp-controller="Course" >Add class home</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Costo</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-        @if(Model.Count() == 0)
-            {
-            <p><strong>No hay clases agregadas</strong></p>
-        }
-        else
-        {
-            @foreach (Course c in Model)
-            {
-                <tr>
-                    <td>@c.Name</td>
-                    <td>@c.Cost</td>
-                    <td>
-                        <p style="color:@StatusHelper.ChooseColor(@c.Status)">@StatusHelper.ShowStatus(@c.Status)</p>
-
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-asp-controller="Course" asp-route-itemid="@c.CourseId">Edit</a>
-                        <a asp-action="Delete" asp-asp-controller="Course" asp-route-itemid="@c.CourseId">Delete</a>
-                    </td>
-                </tr>
-                           
-            }
-        }
-        
-    </tbody>
-</table>
+<t1>Home</t1>

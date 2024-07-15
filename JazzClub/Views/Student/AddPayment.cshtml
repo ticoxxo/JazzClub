@@ -1,0 +1,95 @@
+﻿@model Student
+
+
+@{
+	ViewBag.Title = $"Registrar pago para {Model.FullName}";
+	Payment newPayment = new Payment();
+}
+
+
+<h1 class="display-4">Agregar pago para @Model.FullName </h1>
+
+@if (ViewBag.Cursos.Count == 0)
+{
+	<p>Sin cursos inscritos</p>
+} else 
+
+{
+	<h1 class="display-6">Historial de pagos</h1>
+	if (Model.LastPayment == null)
+	{
+		<p>No hay pagos previos registrados</p>
+	} else
+	{
+		var lastPayment = Model.LastPayment;
+		var s = "";
+		<h1> Último pago registrado: </h1>
+	}
+	<span></span>
+	
+	<h1>Lista de clases inscritas:</h1>
+	<table>
+		<thead>
+		<th>Clase</th>
+		<th>Costo</th>
+		</thead>
+		<tbody>
+			@foreach (Course course in ViewBag.Cursos)
+				{
+					<tr>
+						<td>@course.Name</td>
+						<td>@course.Cost</td>
+					</tr>
+				}
+				<tr>
+					<td>Total: </td>
+				<td> @ViewBag.Total </td>
+				</tr>
+		</tbody>
+	</table>
+
+	<span></span>
+
+	<form asp-action="AddPayment" method="post">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="container-fluid card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm">
+						<label asp-for="@newPayment.Amount" class="form-label"></label>
+						<input asp-for="@newPayment.Amount" class="form-control" />
+					</div>
+					<div class="col-sm">
+						<label asp-for="@newPayment.Discount" class="form-label"></label>
+						<input asp-for="@newPayment.Discount" class="form-control" />
+					</div>
+				</div>
+				<div class="mb-3">
+					<span></span>
+					<select asp-for="@newPayment.PaymentType">
+						<option value="tarjeta">Tarjeta</option>
+						<option value="debito">Débito</option>
+					</select>
+				</div>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-sm">
+							<label asp-for="@newPayment.PaymentDate" class="form-label"></label>
+							<input asp-for="@newPayment.PaymentDate" class="form-control"/>
+						</div>
+						<div class="col-sm">
+							<label asp-for="@newPayment.PaymentExpirationDate" class="form-label"></label>
+							<input asp-for="@newPayment.PaymentExpirationDate" class="form-control" />
+						</div>
+					</div>
+				</div>
+				<input type="hidden" asp-for="Id" />
+				@foreach (Course co in ViewBag.Cursos)
+				{
+					<input type="hidden" value="@co.CourseId" name="cursosPagar"/>
+				}
+				<button type="submit" class="btn btn-dark">Guardar pago</button>
+			</div>
+		</div>
+	</form>
+}

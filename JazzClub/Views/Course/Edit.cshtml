@@ -1,0 +1,31 @@
+﻿@model Course
+@{
+	ViewBag.Title = "Edit student";
+}
+
+<h1 class="display-4">Edit student @Model.Name</h1>
+
+
+<form asp-action="Edit" method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="Name" class="form-label"></label>
+		<input asp-for="Name" class="form-control" />
+	</div>
+	<div class="mb-3">
+		<label asp-for="Cost" class="form-label"></label>
+		<input type="number" min="0.0" asp-for="Cost" class="form-control numeric" />
+	</div>
+	@foreach (Day day in ViewBag.DayList)
+	{
+		
+		<div>
+			<input type="checkbox" asp-for="@day.IsChecked" class="form-check-input" id="@day.DayId" name="newSchedule" value="@day.DayId" />
+
+			<label class="form-check-label" for="@day.Name">@day.Name</label>
+		</div>
+	}
+	<input type="hidden" asp-for="CourseId" />
+	<button type="submit" class="btn btn-dark">Save</button>
+	<a asp-action="Home" asp-controller="Course" class="btn btn-outline-dark">Cancel</a>
+</form>

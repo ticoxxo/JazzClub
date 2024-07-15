@@ -73,12 +73,13 @@
 				<input asp-for="Start_studying_at" class="form-control" />
 			</div>
 			<div class="col-sm">
-				<label asp-for="Photo" class="form-label"></label>
-				<input asp-for="Photo" name="file" type="file" class="form-control" />
+				<label  class="form-label"></label>
+				<input  name="file" type="file" class="form-control" />
 			</div>
 		</div>
 	</div>
 	<input type="hidden" asp-for="Id" />
+	<input type="hidden" asp-for="Photo" />
 
 	<button type="submit" class="btn btn-dark">Guardar editar</button>
 	<a asp-action="Index" asp-controller="Student" class="btn btn-outline-dark">Cancelar</a>

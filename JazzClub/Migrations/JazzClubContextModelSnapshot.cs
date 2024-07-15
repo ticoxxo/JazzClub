@@ -22,19 +22,35 @@ namespace JazzClub.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CourseDay", b =>
+            modelBuilder.Entity("JazzClub.Model.DomainsModels.CourseDay", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CoursesCourseId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("DaysDayId")
                         .HasColumnType("int");
 
-                    b.HasKey("CoursesCourseId", "DaysDayId");
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoursesCourseId");
 
                     b.HasIndex("DaysDayId");
 
-                    b.ToTable("CourseDay");
+                    b.ToTable("CourseDays");
                 });
 
             modelBuilder.Entity("JazzClub.Models.DomainModels.Course", b =>
@@ -244,6 +260,58 @@ namespace JazzClub.Migrations
                     b.ToTable("Guardians");
                 });
 
+            modelBuilder.Entity("JazzClub.Models.DomainModels.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PaymentExpirationDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("JazzClub.Models.DomainModels.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -346,7 +414,7 @@ namespace JazzClub.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CourseDay", b =>
+            modelBuilder.Entity("JazzClub.Model.DomainsModels.CourseDay", b =>
                 {
                     b.HasOne("JazzClub.Models.DomainModels.Course", null)
                         .WithMany()
@@ -383,6 +451,25 @@ namespace JazzClub.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("JazzClub.Models.DomainModels.Payment", b =>
+                {
+                    b.HasOne("JazzClub.Models.DomainModels.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JazzClub.Models.DomainModels.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
 
                     b.Navigation("Student");
                 });

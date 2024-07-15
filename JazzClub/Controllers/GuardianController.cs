@@ -1,94 +1,103 @@
-﻿using JazzClub.Models.DataLayer;
+﻿using Azure;
+using JazzClub.Models.DataLayer;
 using JazzClub.Models.DomainModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace JazzClub.Controllers
 {
-    public class GuardianController : Controller
-    {
-        private Repository<Guardian> guardians {  get; set; }
-        public GuardianController(JazzClubContext ctx) => guardians = new Repository<Guardian>(ctx);
-        public IActionResult Index()
-        {
-            var options = new QueryOptions<Guardian>
-            {
-                OrderBy = t => t.Name,
-                Where = s => s.status == 0
-            };
+	public class GuardianController : Controller
+	{
+		private readonly JazzClubContext _context;
+		public GuardianController(JazzClubContext ctx) => _context = ctx;
+		public async Task<IActionResult> Index()
+		{
+			var options = new QueryOptions<Guardian>
+			{
+				OrderBy = t => t.Name,
+				Where = s => s.status == 0
+			};
 
-            return View(guardians.List(options));
-        }
+			var list = await _context.Guardians
+				.Where(s => s.status == 0)
+				.OrderBy(t => t.Name)
+				.ToListAsync();
 
-        [HttpGet]
-        public ViewResult Add()
-        {
-            this.LoadViewBag("Add");
-            return View("Add", new Guardian());
-        }
+			return View(list);
+		}
 
-        [HttpGet]
-        public ViewResult Edit(int id)
-        {
-            this.LoadViewBag("Edit");
-            var c = this.GetGuardian(id);
-            return View( "Add", c);
+		[HttpGet]
+		public ViewResult Add()
+		{
+			ViewBag.Operation = "Add";
+			return View("Add", new Guardian());
+		}
+
+		[HttpGet]
+		public async Task<ViewResult> Edit(int id)
+		{
+			this.LoadViewBag("Edit");
+			var c = await this.GetGuardian(id);
+			return View("Add", c);
 
 		}
 
-        [HttpPost]
-        public IActionResult Add(Guardian guardian)
-        {
-            bool isAdd = guardian.GuardianId == 0;
+		[HttpPost]
+		public async Task<IActionResult> Add(Guardian guardian)
+		{
+			bool isAdd = guardian.GuardianId == 0;
 
-            if (ModelState.IsValid)
-            {
-                if (isAdd)
-                    guardians.Insert(guardian);
-                else
-                    guardians.Update(guardian);
+			if (ModelState.IsValid)
+			{
+				if (isAdd)
+					_context.Guardians.Add(guardian);
+				else
+					_context.Guardians.Update(guardian);
 
-                guardians.Save();
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                string operation = (isAdd) ? "Add" : "Edit";
-                this.LoadViewBag(operation);
-                return View("Add",guardian);
-            }
-        }
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Index");
+			}
+			else
+			{
+				string operation = (isAdd) ? "Add" : "Edit";
+				ViewBag.Operation = operation;
+				return View("Add", guardian);
+			}
+		}
 
-        private Guardian GetGuardian(int id)
-        {
-            var guardianOptions = new QueryOptions<Guardian>
-            {
-                Where = c => c.GuardianId == id
-            };
-            return guardians.Get(guardianOptions) ?? new Guardian();
-        }
+		private async Task<Guardian> GetGuardian(int id)
+		{
+			
+
+			var guardian = await _context.Guardians
+				.Where(d => d.GuardianId == id)
+				.FirstAsync();
+
+
+			return guardian ?? new Guardian();
+		}
 
 		private void LoadViewBag(string operation)
 		{
-			
+
 
 			ViewBag.Operation = operation;
 		}
 
 		[HttpGet]
-        public ViewResult Delete(int id)
-        {
-            var c = this.GetGuardian(id);
-            return View(c);
-        }
+		public async Task<ViewResult> Delete(int id)
+		{
+			var c = await this.GetGuardian(id);
+			return View(c);
+		}
 
-        [HttpPost]
-        public RedirectToActionResult Delete(Guardian guardian)
-        {
-            guardians.Delete(guardian);
-            guardians.Save();
-            return RedirectToAction("Index");
-        }
-       
-    }
+		[HttpPost]
+		public async Task<RedirectToActionResult> Delete(Guardian guardian)
+		{
+			_context.Guardians.Remove(guardian);
+			await _context.SaveChangesAsync();
+			return RedirectToAction("Index");
+		}
+
+	}
 }
