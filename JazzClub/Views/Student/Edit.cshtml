@@ -42,12 +42,8 @@
 		<input asp-for="Email" class="form-control" />
 	</div>
 	<div class="mb-3">
-		<label asp-for="GuardianId" class="form-label">Selecciona Tutor</label>
-		
-		<select asp-for="GuardianId" asp-items="Model.GuardiansSelectList" class="form-select">
-			<option value="">Selecte Category</option>
-		</select>
-
+		<label asp-for="GuardianName" class="form-label"></label>
+		<input asp-for="GuardianName" class="form-control" />
 
 	</div>
 	<div class="container-fluid">
@@ -72,14 +68,9 @@
 				<label asp-for="Start_studying_at" class="form-label"></label>
 				<input asp-for="Start_studying_at" class="form-control" />
 			</div>
-			<div class="col-sm">
-				<label  class="form-label"></label>
-				<input  name="file" type="file" class="form-control" />
-			</div>
 		</div>
 	</div>
 	<input type="hidden" asp-for="Id" />
-	<input type="hidden" asp-for="Photo" />
 
 	<button type="submit" class="btn btn-dark">Guardar editar</button>
 	<a asp-action="Index" asp-controller="Student" class="btn btn-outline-dark">Cancelar</a>

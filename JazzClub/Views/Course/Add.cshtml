@@ -16,7 +16,7 @@
 		<label asp-for="Cost" class="form-label"></label>
 		<input type="number" min="0.0" asp-for="Cost" class="form-control numeric" />
 	</div>
-	@foreach (Day day in ViewBag.DayList as List<Day>)
+	@foreach (Day day in ViewBag.DayList)
 	{
 		<div>
 			<input type="checkbox" class="form-check-input" id="@day.DayId" name="scheduledDays" value="@day.DayId" />

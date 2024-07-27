@@ -4,6 +4,7 @@ using JazzClub.Models.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JazzClub.Controllers
 {
@@ -18,7 +19,7 @@ namespace JazzClub.Controllers
 			
 
 			var list = await _context.Students
-				.Include(d => d.Guardian)
+				.Include(b => b.Courses)
 				.Where(x => x.Status == 0)
 				.OrderBy(c => c.Id)
 				.ToListAsync();
@@ -31,52 +32,40 @@ namespace JazzClub.Controllers
 		{
 			this.LoadViewBag("Add");
 			Student student = new Student();
-			Student studentsoro = await this.GetGuardians(student);
-			
 
+			var courseList = await _context.Courses
+				.Where(x => x.Status == 0)
+				.ToListAsync();
 
-			return View("Add", studentsoro);
+			ViewBag.CourseList = courseList;
+
+			return View("Add", student);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Add(Student student, IFormFile file, string droplist)
+		public async Task<IActionResult> Add(Student student, int[] courseEnrollement)
 		{
-			bool isAdd = student.Id == 0;
+			
 
-			if (this.CheckStudentModel(student) && file != null)
+			if (ModelState.IsValid)
 			{
-
-				if (file != null)
+				if(courseEnrollement.Length > 0)
 				{
-					using (var memoryStream = new MemoryStream())
+					foreach(var id in courseEnrollement)
 					{
-						await file.CopyToAsync(memoryStream);
-						if (memoryStream.Length < 2097152)
-						{
-							student.Photo = memoryStream.ToArray();
-
-						}
-
-						_context.Students.Add(student);
-						//students.Insert(student);
-						await _context.SaveChangesAsync();
-
-						return RedirectToAction("Index");
+						Course cours = await _context.Courses.FindAsync(id) ?? new Course();
+						student.Courses.Add(cours);
 					}
-				} 
-				else
-				{
-					_context.Students.Add(student);
-					await _context.SaveChangesAsync();
-					return RedirectToAction("Index");
 				}
+
+				_context.Students.Add(student);
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Index");
 			}
 			else
 			{
-				string operation = (isAdd) ? "Add" : "Edit";
-				ViewBag.PhotoContent = new PhotoModel();
+				string operation = "Add";
 				ViewBag.Operation = operation;
-				await this.GetGuardians(student);
 				return View("Add", student);
 			}
 
@@ -87,44 +76,19 @@ namespace JazzClub.Controllers
 		{
 			var c = await this.GetStudent(id);
 			
-			await this.GetGuardians(c);
+			
 			return View(c);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Edit(Student student, IFormFile file, string droplist)
+		public async Task<IActionResult> Edit(Student student)
 		{
 			bool isAdd = student.Id == 0;
-			if (this.CheckStudentModel(student))
+			if (ModelState.IsValid)
 			{
-				if (file != null)
-				{
-					using (var memoryStream = new MemoryStream())
-					{
-						await file.CopyToAsync(memoryStream);
-						if (memoryStream.Length < 2097152)
-						{
-							student.Photo = memoryStream.ToArray();
-
-
-						}
-
-						_context.Students.Update(student);
-						await _context.SaveChangesAsync();
-
-						return RedirectToAction("Index");
-					}
-				}
-				else
-				{
-
-					
-
-					
-					_context.Students.Update(student);
-					await _context.SaveChangesAsync();
-					return RedirectToAction("Index");
-				}
+				_context.Students.Update(student);
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Index");
 			}
 			else
 			{
@@ -199,37 +163,9 @@ namespace JazzClub.Controllers
 			ViewBag.Operation = operation;
 		}
 
-		public async Task<Student> GetGuardians(Student student)
-		{
-			
+		
 
-			var guardianList = await _context.Guardians
-				.Where(d => d.status == 0)
-				.OrderBy(d => d.GuardianId)
-				.ToListAsync();
-
-			
-			foreach (var item in guardianList)
-			{
-				student.GuardiansSelectList.Add(new SelectListItem 
-				{
-					Text = item.Name, Value = item.GuardianId.ToString() 
-				});
-
-			}
-			 return student;
-		}
-
-		private bool CheckStudentModel(Student stu)
-		{
-			if (stu.FirstName == null)
-				return false;
-			if (stu.LastName == null)
-				return false;
-
-			return true;
-		}
-
+	
 		private async Task<Student> GetStudent(int id)
 		{
 			

@@ -18,7 +18,6 @@ namespace JazzClub.Models.DataLayer
 
 		public DbSet<Fingertip> Fingertips { get; set; } = null!;
 
-		public DbSet<Guardian> Guardians { get; set; } = null!;
 
 		public DbSet<Student> Students { get; set; } = null!;
 
@@ -35,7 +34,6 @@ namespace JazzClub.Models.DataLayer
 			modelBuilder.ApplyConfiguration(new UserConfig());
 			modelBuilder.ApplyConfiguration(new CourseConfig());
 			modelBuilder.ApplyConfiguration(new FingerprintConfig());
-			modelBuilder.ApplyConfiguration(new GuardianConfig());
 			modelBuilder.ApplyConfiguration(new StudentConfig());
 			modelBuilder.ApplyConfiguration(new CoursesStudentsConfig());
 			modelBuilder.ApplyConfiguration(new DayConfig());

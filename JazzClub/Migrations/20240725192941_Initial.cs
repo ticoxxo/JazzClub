@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace JazzClub.Migrations
 {
     /// <inheritdoc />
-    public partial class paymenttype : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,26 +43,30 @@ namespace JazzClub.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Guardians",
+                name: "Students",
                 columns: table => new
                 {
-                    GuardianId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Cellphone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    no_ext = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    no_int = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    status = table.Column<int>(type: "int", nullable: false),
-                    created_by = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                    No_ext = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    No_int = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HealthNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GuardianName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Start_studying_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Created_by = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    Last_updated_by = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Guardians", x => x.GuardianId);
+                    table.PrimaryKey("PK_Students", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,39 +110,6 @@ namespace JazzClub.Migrations
                         principalTable: "Days",
                         principalColumn: "DayId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Cellphone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    No_ext = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    No_int = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HealthNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GuardianId = table.Column<int>(type: "int", nullable: true),
-                    Start_studying_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Created_by = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    Last_updated_by = table.Column<int>(type: "int", nullable: true),
-                    Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Guardians_GuardianId",
-                        column: x => x.GuardianId,
-                        principalTable: "Guardians",
-                        principalColumn: "GuardianId");
                 });
 
             migrationBuilder.CreateTable(
@@ -201,6 +172,8 @@ namespace JazzClub.Migrations
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
@@ -280,11 +253,6 @@ namespace JazzClub.Migrations
                 name: "IX_Payments_StudentId",
                 table: "Payments",
                 column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_GuardianId",
-                table: "Students",
-                column: "GuardianId");
         }
 
         /// <inheritdoc />
@@ -313,9 +281,6 @@ namespace JazzClub.Migrations
 
             migrationBuilder.DropTable(
                 name: "Students");
-
-            migrationBuilder.DropTable(
-                name: "Guardians");
         }
     }
 }

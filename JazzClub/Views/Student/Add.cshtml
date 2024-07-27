@@ -7,7 +7,7 @@
 
 <h1 class="display-4">@ViewBag.Operation Student</h1>
 
-<form enctype="multipart/form-data" asp-action="Add" method="post">
+<form asp-action="Add" method="post">
 	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 	<div class="container-fluid">
 		<div class="row ">
@@ -42,17 +42,9 @@
 		<input asp-for="Email" class="form-control"/>
 	</div>
 	<div class="mb-3">
-		<label asp-for="GuardianId" class="form-label" >Selecciona Tutor</label>
-		@*<select asp-for="GuardianId" asp-items="ViewBag.Guardians" class="form-control">
-			<option value="0">Selecciona un tutor (opcional)</option>
-
-		</select>
-		@* <input type="hidden" id="IDCategoryHidden" name="IDCategoryHidden" value="" /> *@
-		<select asp-for="GuardianId" asp-items="Model.GuardiansSelectList" class="form-select">
-			<option value="">Selecte Category</option>
-		</select>
 		
-		
+		<label asp-for="GuardianName" class="form-label"></label>
+		<input asp-for="GuardianName" class="form-control" />
 	</div>
 	<div class="container-fluid">
 		<div class="row ">
@@ -76,14 +68,25 @@
 				<label asp-for="Start_studying_at" class="form-label"></label>
 				<input asp-for="Start_studying_at" class="form-control" />
 			</div>
-			<div class="col-sm">
-				<label asp-for="Photo" class="form-label"></label>
-				<input asp-for="Photo" name="file" type="file" class="form-control" />
-			</div>
+			
 		</div>
 	</div>
-	<input type="hidden" asp-for="Id" />
-
+	<div class="container-fluid">
+		<h1 class="display-5">Inscribir a una clase </h1>
+		@if (ViewBag.CourseList.Count != 0)
+		{
+			@foreach (Course course in ViewBag.CourseList)
+			{
+				<input type="checkbox"  class="form-check-input" id="@course.CourseId" name="courseEnrollement" value="@course.CourseId" />
+				<label class="form-check-label" for="@course.Name">@course.Name</label>
+			}
+		} 
+		else
+		{
+			<p>Cree una clase primero</p>
+		}
+	</div>
+	
 	<button type="submit" class="btn btn-dark" >Guardar</button>
 	<a asp-action="Index" asp-controller="Student" class="btn btn-outline-dark">Cancelar</a>
 </form>

@@ -210,56 +210,6 @@ namespace JazzClub.Migrations
                     b.ToTable("Fingertips");
                 });
 
-            modelBuilder.Entity("JazzClub.Models.DomainModels.Guardian", b =>
-                {
-                    b.Property<int>("GuardianId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GuardianId"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cellphone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("created_by")
-                        .HasColumnType("int");
-
-                    b.Property<string>("no_ext")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("no_int")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("status")
-                        .HasColumnType("int");
-
-                    b.HasKey("GuardianId");
-
-                    b.ToTable("Guardians");
-                });
-
             modelBuilder.Entity("JazzClub.Models.DomainModels.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
@@ -345,8 +295,9 @@ namespace JazzClub.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("GuardianId")
-                        .HasColumnType("int");
+                    b.Property<string>("GuardianName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("HealthNotes")
                         .HasColumnType("nvarchar(max)");
@@ -365,9 +316,6 @@ namespace JazzClub.Migrations
                     b.Property<string>("No_int")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Photo")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime?>("Start_studying_at")
                         .HasColumnType("datetime2");
 
@@ -375,8 +323,6 @@ namespace JazzClub.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GuardianId");
 
                     b.ToTable("Students");
                 });
@@ -472,15 +418,6 @@ namespace JazzClub.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("JazzClub.Models.DomainModels.Student", b =>
-                {
-                    b.HasOne("JazzClub.Models.DomainModels.Guardian", "Guardian")
-                        .WithMany()
-                        .HasForeignKey("GuardianId");
-
-                    b.Navigation("Guardian");
                 });
 
             modelBuilder.Entity("JazzClub.Models.DomainModels.Student", b =>

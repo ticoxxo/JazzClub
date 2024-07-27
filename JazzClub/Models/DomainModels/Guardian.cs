@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JazzClub.Models.DomainModels
 {
+	// NO SE USA , borrar despues
 	public class Guardian
 	{
 		public int GuardianId { get; set; }

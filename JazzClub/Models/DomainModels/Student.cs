@@ -51,9 +51,10 @@ namespace JazzClub.Models.DomainModels
 		[DisplayName("Notas de salud")]
 		public string? HealthNotes { get; set; }
 
-		public int? GuardianId { get; set; }
-		[ValidateNever]
-		public Guardian Guardian { get; set; }
+		[Display(Name = "Nombre del tutor")]
+		[StringLength(100, ErrorMessage = "Nombre del tutor no debe exceder 100 caracteres")]
+		public string? GuardianName { get; set; } = string.Empty;
+		
 
 		[DisplayName("Started studying")]
 		[DataType(DataType.Date)]
@@ -72,8 +73,6 @@ namespace JazzClub.Models.DomainModels
 		[DisplayName("Last update by")]
 		public int? Last_updated_by { get; set; }
 
-		[ValidateNever]
-		public byte[]? Photo { get; set; }
 
 		// Read only display property
 		public string FullName => $"{FirstName} {LastName}";
@@ -82,9 +81,6 @@ namespace JazzClub.Models.DomainModels
 
 		public ICollection<Fingertip> Fingertips { get; } = new List<Fingertip>();
 
-		[NotMapped]
-		[ValidateNever]
-		public List<SelectListItem> GuardiansSelectList { get; set; } = new();
 
 		[NotMapped]
 		[ValidateNever]

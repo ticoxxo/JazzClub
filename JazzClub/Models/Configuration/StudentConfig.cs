@@ -15,10 +15,12 @@ namespace JazzClub.Models.Configuration
 			/*entity.HasMany(e => e.Courses)
 				.WithMany(d => d.Students)
 				.UsingEntity<Payment>();
-			*/
 
-			entity.Property(a => a.GuardianId)
+				entity.Property(a => a.GuardianId)
 				.IsRequired(false);
+
+			 */
+
 
 			entity.Property(a => a.CreatedAt)
 				.HasDefaultValueSql("CURRENT_TIMESTAMP");

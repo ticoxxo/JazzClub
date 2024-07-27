@@ -17,10 +17,9 @@
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Cellphone</th>
 			<th>Pagos</th>
-			<th>Foto</th>
-			<th class="d-none d-sm-table-cell">Tutor</th>
+			<th>Clases inscritas</th>
+			<th >Contacto</th>
 			<th>Status</th>
 			<th></th>
 		</tr>
@@ -30,7 +29,6 @@
 		{
 			<tr>
 				<td>@student.FullName</td>
-				<td>@student.Cellphone</td>
 				<td>
 					@{
 						if(student.LastPayment == null)
@@ -54,37 +52,27 @@
 					}
 				</td>
 				<td>
-					@{
-						 string imgSrc;
-						if (student.Photo == null)
+					
+						@if(student.Courses.Count != 0)
 						{
-						imgSrc = "~/Images/image2.png";
+							<ul>
+								@foreach(Course a in student.Courses)
+								{
+									<li>@a.Name</li>
+								}
+							</ul>
 						} else
 						{
-						var base64 = Convert.ToBase64String(student.Photo);
-						imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+							<p>Sin clases inscritas</p>
 						}
-						 
-						//var base64 = Convert.ToBase64String(student.Photo);
-						//var imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
-						
-					}
-					<img src="@imgSrc" style="width:200px; height:200px" class="img-fluid img-thumbnail d-none d-sm-block" asp-append-version="true" />
-					<img src="@imgSrc" class="img-fluid img-thumbnail d-block d-sm-none" asp-append-version="true" />
+					
 				</td>
-				<td class="d-none d-sm-table-cell">
-					@if(student.GuardianId != null)
-					{
-						<ul>
-							<li><p>@student.Guardian.Name</p></li>
-							<li hidden="@(student.Guardian.Cellphone == null ? true : false)">@student.Guardian.Cellphone</li>
-							<li hidden="@(student.Guardian.Email == null ? true : false)">@student.Guardian.Email</li>
-						</ul>
-					} 
-					else
-					{
-						<p>N/A</p>
-					}
+				<td >
+					<ul>
+						<li hidden="@(student.GuardianName == null ? true : false)"><p>@student.GuardianName</p></li>
+						<li hidden="@(student.Cellphone == null ? true : false)">@student.Cellphone</li>
+						<li hidden="@(student.Email == null ? true : false)">@student.Email</li>
+					</ul>
 				</td>
 				<td>
 					<p style="color:@StatusHelper.ChooseColor(@student.Status)">@StatusHelper.ShowStatus(student.Status)</p>
