@@ -1,19 +1,21 @@
 ﻿using JazzClub.Model.DomainsModels;
 using JazzClub.Models.Configuration;
 using JazzClub.Models.DomainModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace JazzClub.Models.DataLayer
 {
-	 public class JazzClubContext: DbContext
-	{ 
+	 public class JazzClubContext: IdentityDbContext<ApplicationUser>
+    { 
 
 		public JazzClubContext(DbContextOptions<JazzClubContext> options) : base(options) 
 		{
 		}
 
-		public DbSet<User> Users { get; set; } = null!;
+		//public DbSet<User> Users { get; set; } = null!;
 		public DbSet<Course> Courses { get; set; } = null!;
 
 		public DbSet<Fingertip> Fingertips { get; set; } = null!;
@@ -31,8 +33,29 @@ namespace JazzClub.Models.DataLayer
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.ApplyConfiguration(new UserConfig());
-			modelBuilder.ApplyConfiguration(new CourseConfig());
+            base.OnModelCreating(modelBuilder);
+            var hasher = new PasswordHasher<ApplicationUser>();
+            modelBuilder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "c25553fe-1a0f-4f68-aec3-0aa8679b3778",
+                UserName = "vera@jazzclub.com",
+                NormalizedUserName = "VERA@JAZZCLUB.COM",
+                Email = "vera@jazzclub.com",
+                NormalizedEmail = "VERA@JAZZCLUB.COM",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "jazzAdmin.1!"),
+                SecurityStamp = "Z2MEC6PRRVGTMU4LUR7GUJ3RFVOVQIUY",
+                ConcurrencyStamp = "a8efd5ec-c350-41ac-b64f-b789068a3bfc",
+                PhoneNumber = null,
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnd = null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+
+            });
+
+            modelBuilder.ApplyConfiguration(new CourseConfig());
 			modelBuilder.ApplyConfiguration(new FingerprintConfig());
 			modelBuilder.ApplyConfiguration(new StudentConfig());
 			modelBuilder.ApplyConfiguration(new CoursesStudentsConfig());

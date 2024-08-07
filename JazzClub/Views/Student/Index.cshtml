@@ -1,4 +1,7 @@
 ﻿@using JazzClub.Models.Helpers
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @model IEnumerable<Student>
 
 @{
@@ -9,83 +12,91 @@
 	<h1 class="display-4">Students</h1>
 </div>
 
-<a asp-action="Add">Agregar estudiante</a>
-<a >Agregar pago</a>
-<a >Inscribir a clase</a>
+@if (SignInManager.IsSignedIn(User))
+{
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Pagos</th>
-			<th>Clases inscritas</th>
-			<th >Contacto</th>
-			<th>Status</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (Student student in Model)
-		{
+	<a asp-action="Add">Agregar estudiante</a>
+	<a>Agregar pago</a>
+	<a>Inscribir a clase</a>
+
+	<table class="table">
+		<thead>
 			<tr>
-				<td>@student.FullName</td>
-				<td>
-					@{
-						if(student.LastPayment == null)
-						{
-							<p>No hay pagos registrados</p>
-							<a asp-action="AddPayment"
-							   asp-controller="Student"
-							   asp-route-id="@student.Id"
-							   class="btn btn-outline-dark">Agregar pago</a>
-						} 
-						else
-						{
-						
-							<p>Ultimo pago:</p>
-							<ul>
-								<li>Total: @student.LastPayment.Total</li>
-								<li>Fecha de pago: @student.LastPayment.PaymentDate</li>
-								<li>Expide en: @student.LastPayment.PaymentExpirationDate</li>
-							</ul>
+				<th>Name</th>
+				<th>Pagos</th>
+				<th>Clases inscritas</th>
+				<th>Contacto</th>
+				<th>Status</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (Student student in Model)
+			{
+				<tr>
+					<td>@student.FullName</td>
+					<td>
+						@{
+							if (student.LastPayment == null)
+							{
+								<p>No hay pagos registrados</p>
+								<a asp-action="AddPayment"
+								   asp-controller="Student"
+								   asp-route-id="@student.Id"
+								   class="btn btn-outline-dark">Agregar pago</a>
+							}
+							else
+							{
+
+								<p>Ultimo pago:</p>
+								<ul>
+									<li>Total: @student.LastPayment.Total</li>
+									<li>Fecha de pago: @student.LastPayment.PaymentDate</li>
+									<li>Expide en: @student.LastPayment.PaymentExpirationDate</li>
+								</ul>
+							}
 						}
-					}
-				</td>
-				<td>
-					
-						@if(student.Courses.Count != 0)
+					</td>
+					<td>
+
+						@if (student.Courses.Count != 0)
 						{
 							<ul>
-								@foreach(Course a in student.Courses)
+								@foreach (Course a in student.Courses)
 								{
 									<li>@a.Name</li>
 								}
 							</ul>
-						} else
+						}
+						else
 						{
 							<p>Sin clases inscritas</p>
 						}
-					
-				</td>
-				<td >
-					<ul>
-						<li hidden="@(student.GuardianName == null ? true : false)"><p>@student.GuardianName</p></li>
-						<li hidden="@(student.Cellphone == null ? true : false)">@student.Cellphone</li>
-						<li hidden="@(student.Email == null ? true : false)">@student.Email</li>
-					</ul>
-				</td>
-				<td>
-					<p style="color:@StatusHelper.ChooseColor(@student.Status)">@StatusHelper.ShowStatus(student.Status)</p>
-				</td>
-				<td>
-					<a asp-action="Edit" asp-controller="Student" asp-route-id="@student.Id" class="btn btn-outline-dark">
-						Editar
-					</a>
-					<a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-outline-dark">
-						Delete
-					</a>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+
+					</td>
+					<td>
+						<ul>
+							<li hidden="@(student.GuardianName == null ? true : false)"><p>@student.GuardianName</p></li>
+							<li hidden="@(student.Cellphone == null ? true : false)">@student.Cellphone</li>
+							<li hidden="@(student.Email == null ? true : false)">@student.Email</li>
+						</ul>
+					</td>
+					<td>
+						<p style="color:@StatusHelper.ChooseColor(@student.Status)">@StatusHelper.ShowStatus(student.Status)</p>
+					</td>
+					<td>
+						<a asp-action="Edit" asp-controller="Student" asp-route-id="@student.Id" class="btn btn-outline-dark">
+							Editar
+						</a>
+						<a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-outline-dark">
+							Delete
+						</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+} else
+{
+	<p>Please, log in first</p>
+}
