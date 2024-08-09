@@ -10,7 +10,8 @@ namespace JazzClub.Controllers
 {
 	public class StudentController : Controller
 	{
-	
+
+		//<p style="color:@StatusHelper.ChooseColor(@student.Status)">@StatusHelper.ShowStatus(student.Status)</p>
 		private readonly JazzClubContext _context;
 
 		public StudentController(JazzClubContext context) => _context = context;

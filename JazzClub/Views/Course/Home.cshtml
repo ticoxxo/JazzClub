@@ -1,42 +1,49 @@
 ﻿@using JazzClub.Models.Helpers
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @model IEnumerable<Course>
 @{
     ViewBag.Title = "Courses";
 }
 
-
-
 <div class="text-center">
-    <h1>Horario</h1>
-    @foreach (Day day in ViewBag.DayList)
-    {
-        var idColor = ViewBag.Id == 0 ? ViewBag.DayId : ViewBag.Id;
-        string btnCss = (idColor == day.DayId) ? "btn btn-dark" : "btn btn-outline-dark";
-        <a asp-action="Home" asp-route-id="@day.DayId" class="@btnCss me-1 mb-2">@day.Name</a>
-    }
+    <h1 class="display-4">Cursos</h1>
 </div>
 
-<a asp-action="Add">Add class home</a>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="text-center">
+        <h1>Horario</h1>
+        @foreach (Day day in ViewBag.DayList)
+        {
+            var idColor = ViewBag.Id == 0 ? ViewBag.DayId : ViewBag.Id;
+            string btnCss = (idColor == day.DayId) ? "btn btn-dark" : "btn btn-outline-dark";
+            <a asp-action="Home" asp-route-id="@day.DayId" class="@btnCss me-1 mb-2">@day.Name</a>
+        }
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <td>Id</td>
-            <th>Nombre</th>
-            <th>Costo</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
+    <a asp-action="Add">Add class home</a>
 
-        @foreach (Course c in Model)
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <th>Nombre</th>
+                <th>Costo</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (Course c in Model)
             {
                 <tr>
                     <td>@c.CourseId</td>
                     <td>
-                    <a asp-action="Detail" asp-controller="Course" asp-route-id="@c.CourseId">
-                        @c.Name
+                        <a asp-action="Detail" asp-controller="Course" asp-route-id="@c.CourseId">
+                            @c.Name
                         </a>
 
                     </td>
@@ -47,10 +54,18 @@
                     </td>
                     <td>
                         <a asp-action="Edit" asp-controller="Course" asp-route-id="@c.CourseId">Editar</a>
-                    <a asp-action="Delete" asp-controller="Course" asp-route-id="@c.CourseId">Delete</a>
+                        <a asp-action="Delete" asp-controller="Course" asp-route-id="@c.CourseId">Delete</a>
                     </td>
                 </tr>
-                }
+            }
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+
+} else
+{
+    <p>Please, log in first</p>
+}
+
+             

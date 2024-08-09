@@ -45,12 +45,12 @@ namespace JazzClub.Models.DomainModels
 		[DisplayName("Fecha de pago")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Agregue una fecha de pago")]
-        public DateTime? PaymentDate { get; set; }
+        public DateTime PaymentDate { get; set; }
 
         [DisplayName("Fecha de Vencimiento")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Agregue una fecha de expiracion")]
-        public DateTime? PaymentExpirationDate { get; set; }
+        public DateTime PaymentExpirationDate { get; set; }
 
         [Range(0, 5, ErrorMessage = "Only status from 0 to 5")]
         [Required]

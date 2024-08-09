@@ -8,8 +8,10 @@
 	ViewBag.Title = "Students";
 }
 
+ 
+
 <div class="text-center">
-	<h1 class="display-4">Students</h1>
+	<h1 class="display-4">Estudiantes</h1>
 </div>
 
 @if (SignInManager.IsSignedIn(User))
@@ -26,7 +28,7 @@
 				<th>Pagos</th>
 				<th>Clases inscritas</th>
 				<th>Contacto</th>
-				<th>Status</th>
+				<th>Estus de pago</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -51,14 +53,14 @@
 								<p>Ultimo pago:</p>
 								<ul>
 									<li>Total: @student.LastPayment.Total</li>
-									<li>Fecha de pago: @student.LastPayment.PaymentDate</li>
-									<li>Expide en: @student.LastPayment.PaymentExpirationDate</li>
+									<li>Fecha de pago: @student.LastPayment.PaymentDate.ToString("dd/MM/yyyy")</li>
+									<li>Expide en: @student.LastPayment.PaymentExpirationDate.ToString("dd/MM/yyyy")</li>
 								</ul>
 							}
 						}
 					</td>
 					<td>
-
+						
 						@if (student.Courses.Count != 0)
 						{
 							<ul>
@@ -82,7 +84,37 @@
 						</ul>
 					</td>
 					<td>
-						<p style="color:@StatusHelper.ChooseColor(@student.Status)">@StatusHelper.ShowStatus(student.Status)</p>
+						
+						@{
+							if (student.LastPayment == null)
+							{
+								<p>No hay pagos registrados</p>
+							} else
+
+							{
+								DateTime lastoPayment = student.LastPayment.PaymentExpirationDate;
+								DateTime hoy = DateTime.Now;
+								TimeSpan daysUntilNextPay = lastoPayment - hoy;
+								int daysToPayment = daysUntilNextPay.Days;
+			
+								if (hoy <= lastoPayment)
+								{
+									// color rojo
+									if (daysToPayment < 5)
+									{
+										<p style="color:@StatusHelper.ChooseColor(2)">Dias para pagar: @daysToPayment</p>
+									} else
+									{
+										<p style="color:@StatusHelper.ChooseColor(0)">Dias para pagar: @daysToPayment </p>
+									}
+								} else
+								{
+									<p style="color:@StatusHelper.ChooseColor(1)">Pago expirado. Dias desde el último pago: @daysToPayment</p>
+								}
+
+							}
+							}
+
 					</td>
 					<td>
 						<a asp-action="Edit" asp-controller="Student" asp-route-id="@student.Id" class="btn btn-outline-dark">
@@ -100,3 +132,5 @@
 {
 	<p>Please, log in first</p>
 }
+
+ 

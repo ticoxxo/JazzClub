@@ -5,14 +5,17 @@
 }
 
 <div class="text-center">
+    <h1 class="display-4">Home</h1>
+</div>
+
+<div class="text-center">
     @if (SignInManager.IsSignedIn(User))
     {
         <p>Bienvenido, @User.Identity?.Name!</p>
     }
     else
     {
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <p>Please, log in first</p>
     }
 
 </div>
